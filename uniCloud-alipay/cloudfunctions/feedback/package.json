@@ -1,0 +1,7 @@
+{
+  "name": "feedback",
+  "version": "1.0.0",
+  "description": "Handle feedback collection requests",
+  "main": "index.js",
+  "dependencies": {}
+}

@@ -1,0 +1,29 @@
+let currentPlayer: InnerAudioContext | null = null
+
+function releasePlayer(player: InnerAudioContext) {
+  if (currentPlayer === player) {
+    currentPlayer = null
+  }
+  player.destroy()
+}
+
+export function playTabBarSound() {
+  if (currentPlayer != null) {
+    const previousPlayer = currentPlayer
+    currentPlayer = null
+    previousPlayer.stop()
+    previousPlayer.destroy()
+  }
+
+  const player = uni.createInnerAudioContext()
+  currentPlayer = player
+  player.src = '/static/audios/tap.mp3'
+  player.onEnded(() => {
+    releasePlayer(player)
+  })
+  player.onError(() => {
+    console.error('Tab bar tap sound failed to play')
+    releasePlayer(player)
+  })
+  player.play()
+}

@@ -1,0 +1,35 @@
+<template>
+  <view class="page">
+    <image class="logo" src="/static/logo.png"></image>
+    <text class="title">{{title}}</text>
+  </view>
+</template>
+
+<script setup>
+  import { playTabBarSound } from '../../utils/tabbar-sound.uts'
+
+  const title = ref('Hello')
+
+  onTabItemTap(() => {
+    playTabBarSound()
+  })
+</script>
+
+<style lang="scss">
+  .page {
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  .logo {
+    height: 100px;
+    width: 100px;
+    margin: 100px auto 25px auto;
+  }
+
+  .title {
+    font-size: 18px;
+    color: $uni-text-color-grey;
+    text-align: center;
+  }
+</style>

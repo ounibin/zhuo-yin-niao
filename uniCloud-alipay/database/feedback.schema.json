@@ -1,0 +1,44 @@
+{
+  "bsonType": "object",
+  "required": ["type", "content", "create_time"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "反馈记录 ID"
+    },
+    "type": {
+      "bsonType": "string",
+      "enum": ["功能建议", "问题反馈", "其他"],
+      "description": "反馈类型"
+    },
+    "content": {
+      "bsonType": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "description": "反馈内容"
+    },
+    "contact": {
+      "bsonType": "string",
+      "maxLength": 100,
+      "description": "可选联系方式"
+    },
+    "images": {
+      "bsonType": "array",
+      "maxItems": 3,
+      "items": {
+        "bsonType": "string",
+        "maxLength": 1024
+      },
+      "description": "反馈图片云存储 fileID 列表"
+    },
+    "create_time": {
+      "bsonType": "timestamp",
+      "description": "提交时间"
+    }
+  }
+}
