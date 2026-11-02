@@ -1,9 +1,195 @@
 <template>
-  <view class="page"></view>
+  <view class="page">
+    <view class="pronunciation-card">
+      <text class="pinyin">{{ currentTip.pinyin }}</text>
+      <text class="category">{{ currentTip.category }}</text>
+    </view>
+
+    <view class="guide-card">
+      <text class="card-title">怎么发音</text>
+      <text class="guide">{{ currentTip.guide }}</text>
+      <text class="practice">{{ currentTip.practice }}</text>
+    </view>
+
+    <view class="reminder-card">
+      <text class="reminder-title">小提醒</text>
+      <text class="reminder-text">{{ currentTip.reminder }}</text>
+    </view>
+
+  </view>
 </template>
+
+<script setup>
+  const selectedPinyin = ref('')
+
+  const pronunciationTips = [
+    { pinyin: 'a', category: '单韵母', guide: '嘴巴张大，舌头自然放平，发出响亮的“啊”音。', practice: '照照镜子：看看嘴巴有没有张开。' },
+    { pinyin: 'o', category: '单韵母', guide: '嘴唇拢圆，舌头向后，发音时嘴唇保持圆圆的。', practice: '先把嘴唇拢圆，再发音，不要读成带声调的“哦”。' },
+    { pinyin: 'e', category: '单韵母', guide: '嘴巴微微张开，嘴角稍向两边，舌头向后。', practice: '嘴巴不要张太大，声音平稳地发出来。' },
+    { pinyin: 'i', category: '单韵母', guide: '嘴角向两边展开，舌尖轻抵下齿背，舌面抬高。', practice: '像微笑一样把嘴角展开，再发音。' },
+    { pinyin: 'u', category: '单韵母', guide: '嘴唇收圆并向前突出，舌头向后抬高。', practice: '嘴唇要圆圆地向前，不要张大嘴。' },
+    { pinyin: 'ü', category: '单韵母', guide: '先发“i”，舌头位置不动，再把嘴唇拢圆。', practice: '试试先说“i”，保持舌头不动，只改变嘴唇。' },
+
+    { pinyin: 'ai', category: '复韵母', guide: '从“a”开始，嘴巴逐渐合拢，滑向“i”，一口气连起来。', practice: '慢慢读“a—i”，再连快一些，不要分成两个音。' },
+    { pinyin: 'ei', category: '复韵母', guide: '从“e”开始，嘴角逐渐展开，滑向“i”，一口气读完。', practice: '注意嘴形从微开慢慢变扁。' },
+    { pinyin: 'ui', category: '复韵母', guide: '这是“uei”的省写，先发“u”，再滑向“ei”，连成一个音。', practice: '嘴唇先圆后展开，读得连贯，不要停顿。' },
+    { pinyin: 'ao', category: '复韵母', guide: '从“a”开始，嘴巴逐渐收圆，滑向“o”。', practice: '嘴形从张开慢慢变圆，一口气读完。' },
+    { pinyin: 'ou', category: '复韵母', guide: '从“o”开始，嘴唇逐渐收得更圆、更小，滑向“u”。', practice: '嘴唇从圆变得更小，两个部分要连起来。' },
+    { pinyin: 'iu', category: '复韵母', guide: '这是“iou”的省写，先发“i”，再滑向“ou”，一口气读完。', practice: '先扁嘴，再慢慢收圆嘴唇。' },
+    { pinyin: 'ie', category: '复韵母', guide: '从“i”开始，嘴巴逐渐打开，滑向“e”。', practice: '嘴形先扁后微微张开，不要拆开读。' },
+    { pinyin: 'üe', category: '复韵母', guide: '从“ü”开始，保持舌头位置，嘴唇慢慢放松，滑向“e”。', practice: '先圆唇，再慢慢展开嘴唇。' },
+    { pinyin: 'er', category: '复韵母', guide: '先发“e”，同时舌头向上轻轻卷起，发出卷舌音。', practice: '舌头轻轻卷，不要用力，也不要多加一个音。' },
+    { pinyin: 'an', category: '复韵母', guide: '先发“a”，再让舌尖抵住上齿龈，气流从鼻腔出来。', practice: '读到最后时轻轻闭住口腔通道，让声音带一点鼻音。' },
+    { pinyin: 'en', category: '复韵母', guide: '先发“e”，再让舌尖抵住上齿龈，声音从鼻腔出来。', practice: '前面的“e”和后面的鼻音要连在一起。' },
+    { pinyin: 'in', category: '复韵母', guide: '先发“i”，再让舌尖抵住上齿龈，声音从鼻腔出来。', practice: '保持“i”的扁嘴形，最后加上鼻音。' },
+    { pinyin: 'un', category: '复韵母', guide: '这是“uen”的省写，先发“u”，再连上“en”的鼻音。', practice: '嘴唇先圆，读到后面舌尖抵住上齿龈。' },
+    { pinyin: 'ün', category: '复韵母', guide: '先发“ü”，再让舌尖抵住上齿龈，声音从鼻腔出来。', practice: '不要把“ü”读成“u”，先保持“ü”的圆唇和舌位。' },
+    { pinyin: 'ang', category: '复韵母', guide: '先发“a”，再抬起舌根，气流从鼻腔出来。', practice: '最后是舌根抬起的鼻音，不是舌尖抵住上齿龈。' },
+    { pinyin: 'eng', category: '复韵母', guide: '先发“e”，再抬起舌根，气流从鼻腔出来。', practice: '注意最后用舌根收音。' },
+    { pinyin: 'ing', category: '复韵母', guide: '先发“i”，再抬起舌根，气流从鼻腔出来。', practice: '保持“i”的舌位，最后用舌根收音。' },
+    { pinyin: 'ong', category: '复韵母', guide: '先发“o”，再抬起舌根，气流从鼻腔出来。', practice: '嘴唇保持圆，最后用舌根收鼻音。' },
+
+    { pinyin: 'b', category: '声母', guide: '双唇闭合，再轻轻打开，让声音从嘴里出来。', practice: '把手放在嘴前，感觉送出的气比较少。', reminder: '声母要读得轻、短，不要在后面加“哦”。' },
+    { pinyin: 'p', category: '声母', guide: '双唇闭合后打开，送出一股明显的气。', practice: '把手放在嘴前，能感觉到一股气。', reminder: '声母要读得轻、短；和“b”相比，“p”送气更明显。' },
+    { pinyin: 'm', category: '声母', guide: '双唇轻轻闭上，让声音从鼻子里出来。', practice: '轻轻哼一声，感受鼻子在振动。', reminder: '声母要读得轻、短，不要在后面加“哦”。' },
+    { pinyin: 'f', category: '声母', guide: '上牙轻轻碰下嘴唇，向外送气发声。', practice: '感觉气从上牙和下嘴唇之间通过。', reminder: '声母要读得轻、短，不要在后面加“哦”。' },
+    { pinyin: 'd', category: '声母', guide: '舌尖抵住上齿龈，再轻轻弹开，送气少。', practice: '轻轻弹一下舌尖，不要拖长。', reminder: '声母要读得轻、短；和“t”相比，“d”送气少。' },
+    { pinyin: 't', category: '声母', guide: '舌尖抵住上齿龈后弹开，送出一股明显的气。', practice: '把手放在嘴前，感受弹开时的气流。', reminder: '声母要读得轻、短；和“d”相比，“t”送气更明显。' },
+    { pinyin: 'n', category: '声母', guide: '舌尖抵住上齿龈，让声音从鼻子里出来。', practice: '轻轻发音，感受鼻腔里的声音。', reminder: '声母要读得轻、短，不要在后面加“哦”。' },
+    { pinyin: 'l', category: '声母', guide: '舌尖抵住上齿龈，舌头两边留出通道，让声音出来。', practice: '舌尖轻轻碰上面，声音从舌头两边通过。', reminder: '声母要读得轻、短，不要在后面加“哦”。' },
+    { pinyin: 'g', category: '声母', guide: '舌根抵住上腭后部，再轻轻放开，送气少。', practice: '感觉舌头后部轻轻挡一下再放开。', reminder: '声母要读得轻、短；和“k”相比，“g”送气少。' },
+    { pinyin: 'k', category: '声母', guide: '舌根抵住上腭后部后放开，送出一股明显的气。', practice: '把手放在嘴前，感受放开时的气流。', reminder: '声母要读得轻、短；和“g”相比，“k”送气更明显。' },
+    { pinyin: 'h', category: '声母', guide: '舌根靠近上腭后部，气流从窄窄的缝隙中出来。', practice: '轻轻呼气发音，不要把喉咙憋紧。', reminder: '声母要读得轻、短，不要在后面加“哦”。' },
+    { pinyin: 'j', category: '声母', guide: '舌尖向下，舌面前部抬起靠近上腭，送气少。', practice: '发音时舌尖不要卷起来。', reminder: '“j”只和“i、ü”相拼；声母要轻、短。' },
+    { pinyin: 'q', category: '声母', guide: '发音位置和“j”相同，但要送出一股明显的气。', practice: '把手放在嘴前，感受比“j”更明显的气流。', reminder: '“q”只和“i、ü”相拼；声母要轻、短。' },
+    { pinyin: 'x', category: '声母', guide: '舌尖向下，舌面前部靠近上腭，气流从窄缝中通过。', practice: '发音时舌尖不要卷起，轻轻送气。', reminder: '“x”只和“i、ü”相拼；声母要轻、短。' },
+    { pinyin: 'zh', category: '声母', guide: '舌尖向上轻轻卷起，抵住上腭后再放开，送气少。', practice: '舌尖轻轻卷起，不要卷得太紧。', reminder: '这是一个声母，两个字母合起来读；声母要轻、短。' },
+    { pinyin: 'ch', category: '声母', guide: '舌尖向上卷起再放开，送出一股明显的气。', practice: '把手放在嘴前，感受比“zh”更明显的气流。', reminder: '这是一个声母，两个字母合起来读；声母要轻、短。' },
+    { pinyin: 'sh', category: '声母', guide: '舌尖向上卷起，靠近上腭，让气流从窄缝中通过。', practice: '轻轻送气，舌尖不要碰得太紧。', reminder: '这是一个声母，两个字母合起来读；声母要轻、短。' },
+    { pinyin: 'r', category: '声母', guide: '舌尖向上卷起，靠近上腭，声带振动着发音。', practice: '舌尖轻轻卷起，声音不要拖长。', reminder: '声母要读得轻、短，不要在后面加“哦”。' },
+    { pinyin: 'z', category: '声母', guide: '舌尖靠近上门齿背，挡住气流后轻轻放开，送气少。', practice: '舌尖不要伸到牙齿外面。', reminder: '和“c”相比，“z”送气少；声母要轻、短。' },
+    { pinyin: 'c', category: '声母', guide: '舌尖靠近上门齿背后放开，送出一股明显的气。', practice: '把手放在嘴前，感受比“z”更明显的气流。', reminder: '和“z”相比，“c”送气更明显；声母要轻、短。' },
+    { pinyin: 's', category: '声母', guide: '舌尖靠近上门齿背，留出窄缝，让气流轻轻通过。', practice: '像轻轻发出“嘶”的声音，舌尖不要伸出来。', reminder: '声母要读得轻、短，不要在后面加“哦”。' },
+    { pinyin: 'y', category: '声母', guide: '舌面抬高，像从“i”开始发音一样轻轻滑出。', practice: '读“yi”时，前面的“y”轻轻带出后面的“i”。', reminder: '“y”是拼写用的声母字母，不要单独加“哦”来读。' },
+    { pinyin: 'w', category: '声母', guide: '嘴唇先收圆，像从“u”开始发音一样轻轻滑出。', practice: '读“wu”时，嘴唇先圆起来，再连上“u”。', reminder: '“w”是拼写用的声母字母，不要单独加“哦”来读。' },
+
+    { pinyin: 'zhi', category: '整体认读音节', guide: '舌尖向上卷起，整个音节连起来直接读。', practice: '读得完整、连贯，不要拆成“zh”和“i”两部分。' },
+    { pinyin: 'chi', category: '整体认读音节', guide: '舌尖向上卷起，发音时送出一股气，整个音节直接读。', practice: '先轻轻卷起舌尖，再连贯读完整个音节。' },
+    { pinyin: 'shi', category: '整体认读音节', guide: '舌尖向上卷起，气流从窄缝中通过，整个音节直接读。', practice: '保持舌尖轻轻卷起，一口气读完。' },
+    { pinyin: 'ri', category: '整体认读音节', guide: '舌尖向上卷起，声带振动，整个音节直接读。', practice: '舌尖轻轻卷起，声音连贯，不要拆开拼。' },
+    { pinyin: 'zi', category: '整体认读音节', guide: '舌尖靠近上门齿背，整个音节连起来直接读。', practice: '舌尖不要伸出来，一口气读完整个音节。' },
+    { pinyin: 'ci', category: '整体认读音节', guide: '舌尖靠近上门齿背，发音时送出一股气，整个音节直接读。', practice: '把手放在嘴前感受气流，再连贯读完整个音节。' },
+    { pinyin: 'si', category: '整体认读音节', guide: '舌尖靠近上门齿背，气流从窄缝中通过，整个音节直接读。', practice: '像轻轻发出“嘶”的声音，再连上整个音节。' },
+    { pinyin: 'yi', category: '整体认读音节', guide: '舌面抬高，嘴角展开，整个音节直接读。', practice: '像读“衣”一样连贯读完，不要拆开拼。' },
+    { pinyin: 'wu', category: '整体认读音节', guide: '嘴唇收圆并向前突出，整个音节直接读。', practice: '像读“乌”一样连贯读完，不要拆开拼。' },
+    { pinyin: 'yu', category: '整体认读音节', guide: '发音时舌头像“i”，嘴唇像“ü”一样拢圆，整个音节直接读。', practice: '先摆好“ü”的口型，再连贯读完整个音节。' },
+    { pinyin: 'ye', category: '整体认读音节', guide: '从“i”的舌位开始，嘴巴打开，整个音节直接读。', practice: '连贯读完整个音节，不要拆成“y”和“e”。' },
+    { pinyin: 'yue', category: '整体认读音节', guide: '舌头保持“ü”的位置，嘴唇从圆慢慢放松，整个音节直接读。', practice: '注意先圆唇，再自然打开，一口气读完。' },
+    { pinyin: 'yuan', category: '整体认读音节', guide: '从“ü”的口型开始，嘴巴自然打开，再连上鼻音，整个音节直接读。', practice: '嘴唇从圆变自然，连贯读完整个音节，不要拆开拼。' },
+    { pinyin: 'yin', category: '整体认读音节', guide: '从“i”的舌位开始，连上鼻音，整个音节直接读。', practice: '保持扁嘴形，连贯读完整个音节。' },
+    { pinyin: 'yun', category: '整体认读音节', guide: '发音时舌头像“i”，嘴唇像“ü”一样拢圆，再连上鼻音。', practice: '先摆好“ü”的口型，再连贯读完整个音节。' },
+    { pinyin: 'ying', category: '整体认读音节', guide: '从“i”的舌位开始，连上舌根鼻音，整个音节直接读。', practice: '保持扁嘴形，最后用舌根收音。' }
+  ]
+
+  const currentTip = computed(() => {
+    const matchedTip = pronunciationTips.find((tip) => tip.pinyin == selectedPinyin.value)
+    if (matchedTip == null) {
+      return {
+        pinyin: selectedPinyin.value,
+        category: '未找到拼音',
+        guide: '请返回首页，重新选择一个拼音卡片。',
+        practice: '每张卡片都有对应的发音提示。',
+        reminder: '如果问题仍然存在，请重新打开这个页面。'
+      }
+    }
+
+    return {
+      pinyin: matchedTip.pinyin,
+      category: matchedTip.category,
+      guide: matchedTip.guide,
+      practice: matchedTip.practice,
+      reminder: matchedTip.reminder != null
+        ? matchedTip.reminder
+        : '拼音卡片没有标声调，读词语时要按词语的声调来读。'
+    }
+  })
+
+  onLoad((options) => {
+    const queryPinyin = options['pinyin']
+    if (queryPinyin != null) {
+      selectedPinyin.value = queryPinyin
+    }
+  })
+</script>
 
 <style lang="scss">
   .page {
     min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  .pronunciation-card {
+    align-items: center;
+    padding: 28px 20px;
+    border-radius: 16px;
+    background-color: $uni-bg-color;
+  }
+
+  .pinyin {
+    color: $uni-color-primary;
+    font-size: 56px;
+    font-weight: 700;
+  }
+
+  .category {
+    margin-top: 8px;
+    color: $uni-text-color-grey;
+    font-size: 14px;
+  }
+
+  .guide-card,
+  .reminder-card {
+    margin-top: 16px;
+    padding: 18px 16px;
+    border-radius: 16px;
+    background-color: $uni-bg-color;
+  }
+
+  .card-title,
+  .reminder-title {
+    color: $uni-text-color;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .guide {
+    margin-top: 14px;
+    color: $uni-text-color;
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .practice {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: $uni-color-primary-light;
+    color: $uni-color-primary;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .reminder-text {
+    margin-top: 10px;
+    color: $uni-text-color-grey;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .footnote {
+    margin: 18px 4px 8px;
+    color: $uni-text-color-grey;
+    font-size: 12px;
+    line-height: 20px;
   }
 </style>

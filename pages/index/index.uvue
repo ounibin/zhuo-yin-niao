@@ -60,7 +60,7 @@
 
   function openPinyin(pinyin) {
     uni.navigateTo({
-      url: `/pages/pinyin-detail/pinyin-detail?pinyin=${pinyin}`
+      url: `/pages/pinyin-detail/pinyin-detail?pinyin=${encodeURIComponent(pinyin)}`
     })
   }
 </script>
