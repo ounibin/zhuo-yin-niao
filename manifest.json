@@ -1,8 +1,8 @@
 {
-	"name": "template-uni-app-x",
-	"appid": "__UNI__95F2725",
+	"name": "啄音鸟",
+	"appid": "__UNI__07F5138",
 	"description": "",
-	"versionName": "1.0.0",
+	"versionName": "0.1.0",
 	"versionCode": "100",
 	"uni-app-x": {
 		"vapor": true,
@@ -14,9 +14,10 @@
 	"quickapp": {},
 	/* 小程序特有相关 */
 	"mp-weixin": {
-		"appid": "",
+		"appid": "wx2cb880bedae769b8",
 		"setting": {
-			"urlCheck": false
+			"urlCheck": false,
+			"minified": true
 		},
 		"usingComponents": true
 	},
@@ -69,6 +70,7 @@
 	"web": {
 		"router": {
 			"mode": ""
-		}
+		},
+		"title": "啄音鸟"
 	}
 }
