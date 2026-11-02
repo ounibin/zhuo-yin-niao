@@ -1,18 +1,68 @@
 <template>
   <view class="page">
-    <image class="logo" src="/static/logo.png"></image>
-    <text class="title">{{title}}</text>
+    <view class="page-heading">
+      <text class="page-title">拼音卡片</text>
+      <text class="page-subtitle">认识拼音，从这里开始</text>
+    </view>
+
+    <view v-for="group in pinyinGroups" :key="group.title" class="pinyin-section">
+      <view class="section-heading">
+        <text class="section-title">{{ group.title }}</text>
+        <text class="section-count">{{ group.items.length }} 个</text>
+      </view>
+      <view class="pinyin-grid">
+        <view
+          v-for="item in group.items"
+          :key="item"
+          class="pinyin-card"
+          @click="openPinyin(item)"
+        >
+          <view class="pinyin-card-content">
+            <text class="pinyin-text">{{ item }}</text>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
 <script setup>
   import { playTabBarSound } from '../../utils/tabbar-sound.uts'
 
-  const title = ref('Hello')
+  const pinyinGroups = [
+    {
+      title: '单韵母',
+      items: ['a', 'o', 'e', 'i', 'u', 'ü']
+    },
+    {
+      title: '复韵母',
+      items: [
+        'ai', 'ei', 'ui', 'ao', 'ou', 'iu', 'ie', 'üe', 'er',
+        'an', 'en', 'in', 'un', 'ün', 'ang', 'eng', 'ing', 'ong'
+      ]
+    },
+    {
+      title: '声母',
+      items: [
+        'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h',
+        'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's', 'y', 'w'
+      ]
+    },
+    {
+      title: '整体认读音节',
+      items: ['zhi', 'chi', 'shi', 'ri', 'zi', 'ci', 'si', 'yi', 'wu', 'yu', 'ye', 'yue', 'yuan', 'yin', 'yun', 'ying']
+    }
+  ]
 
   onTabItemTap(() => {
     playTabBarSound()
   })
+
+  function openPinyin(pinyin) {
+    uni.navigateTo({
+      url: `/pages/pinyin-detail/pinyin-detail?pinyin=${pinyin}`
+    })
+  }
 </script>
 
 <style lang="scss">
@@ -21,15 +71,76 @@
     padding: 24px 16px;
   }
 
-  .logo {
-    height: 100px;
-    width: 100px;
-    margin: 100px auto 25px auto;
+  .page-heading {
+    margin-bottom: 24px;
   }
 
-  .title {
-    font-size: 18px;
+  .page-title {
+    color: $uni-color-title;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .page-subtitle {
+    margin-top: 8px;
     color: $uni-text-color-grey;
-    text-align: center;
+    font-size: 14px;
+  }
+
+  .pinyin-section {
+    margin-bottom: 20px;
+    padding: 16px;
+    border-radius: 16px;
+    background-color: $uni-bg-color;
+  }
+
+  .section-heading {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    color: $uni-text-color;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .section-count {
+    color: $uni-text-color-grey;
+    font-size: 12px;
+  }
+
+  .pinyin-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-right: -$uni-spacing-row-sm;
+    margin-left: -$uni-spacing-row-sm;
+  }
+
+  .pinyin-card {
+    width: 33.3333%;
+    box-sizing: border-box;
+    padding: 0 $uni-spacing-row-sm $uni-spacing-col-base;
+  }
+
+  .pinyin-card-content {
+    height: 68px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #edf2ef;
+    border-radius: 12px;
+    background-color: #f8fbf9;
+  }
+
+  .pinyin-text {
+    color: $uni-color-primary;
+    font-size: 22px;
+    font-weight: 600;
   }
 </style>

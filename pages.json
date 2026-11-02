@@ -3,7 +3,13 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "uni-app x"
+        "navigationBarTitleText": "拼音学习"
+      }
+    },
+    {
+      "path": "pages/pinyin-detail/pinyin-detail",
+      "style": {
+        "navigationBarTitleText": "拼音详情"
       }
     },
     {

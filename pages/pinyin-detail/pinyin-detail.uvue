@@ -1,0 +1,9 @@
+<template>
+  <view class="page"></view>
+</template>
+
+<style lang="scss">
+  .page {
+    min-height: 100vh;
+  }
+</style>
