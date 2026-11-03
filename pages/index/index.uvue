@@ -141,6 +141,7 @@
   .pinyin-text {
     color: $uni-color-primary;
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 400;
+    font-family: "PinyinHandwriting";
   }
 </style>

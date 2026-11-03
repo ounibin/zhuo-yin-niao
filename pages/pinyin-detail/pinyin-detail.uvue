@@ -138,7 +138,8 @@
   .pinyin {
     color: $uni-color-primary;
     font-size: 56px;
-    font-weight: 700;
+    font-weight: 400;
+    font-family: "PinyinHandwriting";
   }
 
   .category {

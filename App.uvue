@@ -42,6 +42,12 @@
 <style lang="scss">
   /*每个页面公共css */
 
+@font-face {
+  font-family: "PinyinHandwriting";
+  src: url("/static/fonts/PatrickHand-Regular.ttf") format("truetype");
+  font-weight: 400;
+}
+
 .uni-row {
     flex-direction: row;
 }
