@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-  import { playTabBarSound } from '../../utils/tabbar-sound.uts'
+  import { playTabBarSound } from '../../utils/play-sound.uts'
 
   onTabItemTap(() => {
     playTabBarSound()

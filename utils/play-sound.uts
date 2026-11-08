@@ -27,3 +27,24 @@ export function playTabBarSound() {
   })
   player.play()
 }
+
+export function playSound(url: string) {
+  if (currentPlayer != null) {
+    const previousPlayer = currentPlayer
+    currentPlayer = null
+    previousPlayer.stop()
+    previousPlayer.destroy()
+  }
+
+  const player = uni.createInnerAudioContext()
+  currentPlayer = player
+  player.src = url
+  player.onEnded(() => {
+    releasePlayer(player)
+  })
+  player.onError(() => {
+    console.error('Tab bar tap sound failed to play')
+    releasePlayer(player)
+  })
+  player.play()
+}

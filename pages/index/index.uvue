@@ -27,7 +27,8 @@
 </template>
 
 <script setup>
-  import { playTabBarSound } from '../../utils/tabbar-sound.uts'
+  import { playTabBarSound, playSound } from '../../utils/play-sound.uts'
+  import { pinyinData } from '../../utils/pinyin-data.uts'
 
   const pinyinGroups = [
     {
@@ -59,9 +60,12 @@
   })
 
   function openPinyin(pinyin) {
-    uni.navigateTo({
-      url: `/pages/pinyin-detail/pinyin-detail?pinyin=${encodeURIComponent(pinyin)}`
-    })
+    const audioUrl = pinyinData[pinyin]
+    if (audioUrl) {
+      playSound(audioUrl)
+    } else {
+      console.warn(`未找到拼音 ${pinyin} 的音频 URL`)
+    }
   }
 </script>
 
@@ -123,6 +127,11 @@
     width: 33.3333%;
     box-sizing: border-box;
     padding: 0 $uni-spacing-row-sm $uni-spacing-col-base;
+    &:active {
+      transform: translateY(2px) scale(0.98);
+      box-shadow: 0 0 0 rgba(7, 193, 96, 0.04);
+      opacity: 0.96;
+    }
   }
 
   .pinyin-card-content {

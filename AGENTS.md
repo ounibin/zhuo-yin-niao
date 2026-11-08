@@ -10,6 +10,10 @@
 - 使用组件时，优先使用 uni-ui 中的组件。uni-ui 是DCloud提供的一个跨端ui库，它是基于vue组件的、flex布局的、无dom的跨全端ui框架。uni-ui 不包括内置组件，它是内置组件的补充。
 - 使用图标时，优先使用 uni-ui 中的 uni-icons 组件。
 
+## 编码
+
+每次只编写和本次有关的代码，严禁私自改动其他的。
+
 ## uni-app x
 
 pages.json 文件是 uni-app x 的页面管理配置文件，决定应用的首页、页面文件的路径、窗口样式、原生的导航栏、底部的原生tabbar 等。参考：https://doc.dcloud.net.cn/uni-app-x/collocation/pagesjson.html
