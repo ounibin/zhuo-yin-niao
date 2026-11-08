@@ -8,7 +8,7 @@ function releasePlayer(player: InnerAudioContext) {
 }
 
 export function playTabBarSound() {
-  if (currentPlayer != null) {
+    if (currentPlayer != null) {
     const previousPlayer = currentPlayer
     currentPlayer = null
     previousPlayer.stop()
@@ -47,4 +47,10 @@ export function playSound(url: string) {
     releasePlayer(player)
   })
   player.play()
+}
+
+export function clickFeedback() {
+  uni.vibrateShort({
+    type: 'heavy'
+  })
 }

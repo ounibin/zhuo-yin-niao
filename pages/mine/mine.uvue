@@ -24,10 +24,10 @@
 </template>
 
 <script setup>
-  import { playTabBarSound } from '../../utils/play-sound.uts'
+  import { clickFeedback } from '../../utils/play-sound.uts'
 
   onTabItemTap(() => {
-    playTabBarSound()
+    clickFeedback()
   })
 
   function openFeedback() {

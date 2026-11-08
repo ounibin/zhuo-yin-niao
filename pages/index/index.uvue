@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-  import { playTabBarSound, playSound } from '../../utils/play-sound.uts'
+  import { clickFeedback, playSound } from '../../utils/play-sound.uts'
   import { pinyinData } from '../../utils/pinyin-data.uts'
 
   const pinyinGroups = [
@@ -56,7 +56,7 @@
   ]
 
   onTabItemTap(() => {
-    playTabBarSound()
+    clickFeedback()
   })
 
   function openPinyin(pinyin) {
